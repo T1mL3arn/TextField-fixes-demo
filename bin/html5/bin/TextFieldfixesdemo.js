@@ -938,8 +938,8 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		var htmlText4 = "This text field has <font face=\"Arial\" size=\"14px\" color=\"#22AA20\">html text</font> and wordWrap = true and autoSize = NONE";
 		this.createTextField("",new openfl_geom_Point(430,30),new openfl_geom_Point(360,50),openfl_text_TextFieldAutoSize.NONE,openfl_text_TextFormatAlign.LEFT,false);
 		this.createTextField("",new openfl_geom_Point(0,0),new openfl_geom_Point(360,90),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,false);
-		this.createTextField("",new openfl_geom_Point(410,0),new openfl_geom_Point(360,112),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,true);
-		this.createTextField("",new openfl_geom_Point(410,40),new openfl_geom_Point(360,150),openfl_text_TextFieldAutoSize.NONE,openfl_text_TextFormatAlign.LEFT,true);
+		this.createTextField("",new openfl_geom_Point(370,0),new openfl_geom_Point(360,112),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,true);
+		this.createTextField("",new openfl_geom_Point(370,40),new openfl_geom_Point(360,150),openfl_text_TextFieldAutoSize.NONE,openfl_text_TextFormatAlign.LEFT,true);
 		this.tfs[19].set_htmlText(htmlText1);
 		this.tfs[20].set_htmlText(htmlText2);
 		this.tfs[21].set_htmlText(htmlText3);

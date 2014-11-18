@@ -122,8 +122,8 @@ class Main extends Sprite
 		
 		createTextField("", new Point(430, 30), new Point(360, 50), TextFieldAutoSize.NONE, TextFormatAlign.LEFT, false);
 		createTextField("", new Point(0, 0), new Point(360, 90), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, false);
-		createTextField("", new Point(410, 0), new Point(360, 112), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, true);
-		createTextField("", new Point(410, 40), new Point(360, 150), TextFieldAutoSize.NONE, TextFormatAlign.LEFT, true);
+		createTextField("", new Point(370, 0), new Point(360, 112), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, true);
+		createTextField("", new Point(370, 40), new Point(360, 150), TextFieldAutoSize.NONE, TextFormatAlign.LEFT, true);
 		
 		tfs[19].htmlText = htmlText1;
 		tfs[20].htmlText = htmlText2;
