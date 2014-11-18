@@ -71,9 +71,73 @@ class Main extends Sprite
 		wordWrapNoAutoSizeSection();	// 8
 		nullSizesFieldSection();		// 9 - 15
 		wordWrapAutoSizeSection();		// 16
+		otherAutoSizeSection();			// 17 - 18
+		cmplxFormatSection();			// 19 - 22
 		
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		
+		//stringReplaceTest();
+	}
+	
+	private function stringReplaceTest():Void
+	{
+		#if js
+		var str = "abc\rabc\rabc";
+		var time:Int;
+		
+		// split-join
+		// replace
+		time = Lib.getTimer();
+		
+		for (i in 0...90000)
+		{
+			str = str.split('\r').join('\n');
+			
+			str = "abc\rabc\rabc";
+		}
+		
+		trace('split-join time: ' + (Lib.getTimer() - time));
+		
+		time = Lib.getTimer();
+		// replace
+		for (i in 0...90000)
+		{
+			str = untyped __js__("str.replace(new RegExp('\\r', 'g'), '\\n')");
+			
+			str = "abc\rabc\rabc";
+		}
+		
+		trace('replace time: ' + (Lib.getTimer() - time));
+		
+		#end
+	}
+	
+	private function cmplxFormatSection():Void
+	{	
+		var htmlText1 = 'This text field has <font face="Arial" size="14px" color="#22AA20">html text</font> and wordWrap = false and autoSize = NONE';
+		var htmlText2 = 'This text field has <font face="Arial" size="14px" color="#22AA20">html text</font> and wordWrap = false and autoSize = LEFT';
+		var htmlText3 = 'This text field has <font face="Arial" size="14px" color="#22AA20">html text</font> and wordWrap = true and autoSize = LEFT';
+		var htmlText4 = 'This text field has <font face="Arial" size="14px" color="#22AA20">html text</font> and wordWrap = true and autoSize = NONE';
+		
+		createTextField("", new Point(430, 30), new Point(360, 50), TextFieldAutoSize.NONE, TextFormatAlign.LEFT, false);
+		createTextField("", new Point(0, 0), new Point(360, 90), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, false);
+		createTextField("", new Point(410, 0), new Point(360, 112), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, true);
+		createTextField("", new Point(410, 40), new Point(360, 150), TextFieldAutoSize.NONE, TextFormatAlign.LEFT, true);
+		
+		tfs[19].htmlText = htmlText1;
+		tfs[20].htmlText = htmlText2;
+		tfs[21].htmlText = htmlText3;
+		tfs[22].htmlText = htmlText4;
+	}
+	
+	private function otherAutoSizeSection():Void
+	{
+		var xPos = 50.0;
+		var yPos = 50;
+		
+		createTextField("One-line text with autoSize = " + autoSizeToStr(TextFieldAutoSize.LEFT), new Point(0, 0), new Point(xPos, yPos), TextFieldAutoSize.LEFT, TextFormatAlign.RIGHT, false);
+		createTextField("Multi-line text with autoSize = " + autoSizeToStr(TextFieldAutoSize.LEFT) + "\n and left text align.", new Point(0, 0), new Point(xPos, yPos+tfs[17].height+5), TextFieldAutoSize.LEFT, TextFormatAlign.LEFT, false);
 	}
 	
 	private function wordWrapAutoSizeSection() 
@@ -83,7 +147,7 @@ class Main extends Sprite
 		
 		var text = "This text field has LEFT auto size and has wordWrap = true.\n\nSOME_BIG_TEXT_IN_ONE_LINE_THAT_MORE_THEN_FIELD_WIDTH\nLorem ipsum dolor sit amet, consectetur-adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 		
-		var f = createTextField(text, new Point(w, h), new Point(370, 200), TextFieldAutoSize.LEFT, TextFormatAlign.RIGHT, true);
+		var f = createTextField(text, new Point(w, h), new Point(360, 200), TextFieldAutoSize.LEFT, TextFormatAlign.RIGHT, true);
 		
 		p2 = new Point(f.x + f.width, f.y + f.height);
 		
@@ -186,7 +250,7 @@ class Main extends Sprite
 	}
 	
 	private function createTextField(text:String, size:Point, pos:Point, autosize:TextFieldAutoSize, align, wordWrap:Bool, addChild = true, tColor = 0x4444EE, b = true, bColor = 0xFF0000, bg = true, bgColor = 0xDDDDDD, noAdd = false):TextField
-	{
+	{	
 		var f:TextFormat = new TextFormat("Arial", 12, 0, false);
 		f.align = align;
 		f.color = tColor;

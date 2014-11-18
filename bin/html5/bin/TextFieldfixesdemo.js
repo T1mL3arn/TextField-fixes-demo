@@ -907,14 +907,55 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.wordWrapNoAutoSizeSection();
 		this.nullSizesFieldSection();
 		this.wordWrapAutoSizeSection();
+		this.otherAutoSizeSection();
+		this.cmplxFormatSection();
 		this.stage.addEventListener(openfl_events_Event.ENTER_FRAME,$bind(this,this.onFrame));
 		this.stage.addEventListener(openfl_events_KeyboardEvent.KEY_UP,$bind(this,this.onKeyUp));
+	}
+	,stringReplaceTest: function() {
+		var str = "abc\rabc\rabc";
+		var time;
+		time = openfl_Lib.getTimer();
+		var _g = 0;
+		while(_g < 90000) {
+			var i = _g++;
+			str = str.split("\r").join("\n");
+			str = "abc\rabc\rabc";
+		}
+		time = openfl_Lib.getTimer();
+		var _g1 = 0;
+		while(_g1 < 90000) {
+			var i1 = _g1++;
+			str = str.replace(new RegExp('\r', 'g'), '\n');
+			str = "abc\rabc\rabc";
+		}
+		null;
+	}
+	,cmplxFormatSection: function() {
+		var htmlText1 = "This text field has <font face=\"Arial\" size=\"14px\" color=\"#22AA20\">html text</font> and wordWrap = false and autoSize = NONE";
+		var htmlText2 = "This text field has <font face=\"Arial\" size=\"14px\" color=\"#22AA20\">html text</font> and wordWrap = false and autoSize = LEFT";
+		var htmlText3 = "This text field has <font face=\"Arial\" size=\"14px\" color=\"#22AA20\">html text</font> and wordWrap = true and autoSize = LEFT";
+		var htmlText4 = "This text field has <font face=\"Arial\" size=\"14px\" color=\"#22AA20\">html text</font> and wordWrap = true and autoSize = NONE";
+		this.createTextField("",new openfl_geom_Point(430,30),new openfl_geom_Point(360,50),openfl_text_TextFieldAutoSize.NONE,openfl_text_TextFormatAlign.LEFT,false);
+		this.createTextField("",new openfl_geom_Point(0,0),new openfl_geom_Point(360,90),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,false);
+		this.createTextField("",new openfl_geom_Point(410,0),new openfl_geom_Point(360,112),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,true);
+		this.createTextField("",new openfl_geom_Point(410,40),new openfl_geom_Point(360,150),openfl_text_TextFieldAutoSize.NONE,openfl_text_TextFormatAlign.LEFT,true);
+		this.tfs[19].set_htmlText(htmlText1);
+		this.tfs[20].set_htmlText(htmlText2);
+		this.tfs[21].set_htmlText(htmlText3);
+		this.tfs[22].set_htmlText(htmlText4);
+	}
+	,otherAutoSizeSection: function() {
+		var xPos = 50.0;
+		var yPos = 50;
+		this.createTextField("One-line text with autoSize = " + this.autoSizeToStr(openfl_text_TextFieldAutoSize.LEFT),new openfl_geom_Point(0,0),new openfl_geom_Point(xPos,yPos),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.RIGHT,false);
+		this.createTextField("Multi-line text with autoSize = " + this.autoSizeToStr(openfl_text_TextFieldAutoSize.LEFT) + "\n and left text align.",new openfl_geom_Point(0,0),new openfl_geom_Point(xPos,yPos + this.tfs[17].get_height() + 5),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.LEFT,false);
 	}
 	,wordWrapAutoSizeSection: function() {
 		var w = 150;
 		var h = 1;
 		var text = "This text field has LEFT auto size and has wordWrap = true.\n\nSOME_BIG_TEXT_IN_ONE_LINE_THAT_MORE_THEN_FIELD_WIDTH\nLorem ipsum dolor sit amet, consectetur-adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-		var f = this.createTextField(text,new openfl_geom_Point(w,h),new openfl_geom_Point(370,200),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.RIGHT,true);
+		var f = this.createTextField(text,new openfl_geom_Point(w,h),new openfl_geom_Point(360,200),openfl_text_TextFieldAutoSize.LEFT,openfl_text_TextFormatAlign.RIGHT,true);
 		this.p2 = new openfl_geom_Point(f.get_x() + f.get_width(),f.get_y() + f.get_height());
 		this.p2mark = new openfl_display_Shape();
 		this.p2mark.set_x(f.get_x() + f.get_width());
@@ -9065,7 +9106,17 @@ openfl__$Vector_Vector_$Impl_$.arrayAccess = function(this1,key) {
 	return this1.data[key];
 };
 openfl__$Vector_Vector_$Impl_$.arrayWrite = function(this1,key,value) {
-	if(key >= this1.length && !this1.fixed) this1.length = key + 1;
+	if(!this1.fixed) {
+		if(key >= this1.length) this1.length = key + 1;
+		if(this1.data.length < this1.length) {
+			var data;
+			var this2;
+			this2 = new Array(this1.data.length + 10);
+			data = this2;
+			haxe_ds__$Vector_Vector_$Impl_$.blit(this1.data,0,data,0,this1.data.length);
+			this1.data = data;
+		}
+	}
 	return this1.data[key] = value;
 };
 openfl__$Vector_Vector_$Impl_$.fromArray = function(value) {
@@ -16545,8 +16596,8 @@ openfl_text_TextField.prototype = $extend(openfl_display_InteractiveObject.proto
 				if(i >= this.__text.length) break;
 				$char = this.__text.charAt(i);
 				if($char == "") break;
-				if($char == "\n" || $char == "\r" || $char == "\t" || $char == " " || $char == "-") wordStart = i + 1;
-				if($char == "\n" || $char == "\r") lineStart = i + 1;
+				if($char == "\n" || $char == "\t" || $char == " " || $char == "-") wordStart = i + 1;
+				if($char == "\n") lineStart = i + 1;
 				str3 = this.__text.substring(lineStart,i + 1);
 				lineWidth = this.__context.measureText(str3).width;
 				if(lineWidth >= this.__width - 4 && str3.length > 1) {
@@ -16713,6 +16764,7 @@ openfl_text_TextField.prototype = $extend(openfl_display_InteractiveObject.proto
 		return this.__text;
 	}
 	,set_text: function(value) {
+		value = value.split("\r").join("\n");
 		if(this.__isHTML || this.__text != value) this.__dirty = true;
 		this.__ranges = null;
 		this.__isHTML = false;

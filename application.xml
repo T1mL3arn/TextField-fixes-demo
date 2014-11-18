@@ -19,5 +19,6 @@
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->
 	<haxeflag name="--no-traces" if="release" />
+	<!--<haxeflag name="-D dom" />-->
 	
 </project>
